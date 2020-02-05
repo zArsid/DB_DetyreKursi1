@@ -82,16 +82,22 @@ A band just performed on a concert
 qiramarrjes kur huazohet nje film. SP-ja duhet te insertojenje rresht ne tabelën payment me
 informacionin e duhur, ku atributi vlera (amount) eshte e barabarte me këstin e qiramarrjes te
 filmit (rental_rate) ne fjale dhe data pageses (payment_date) vendoset ne NOW(). */
-USE Rentalz
-CREATE PROCEDURE BejPagese(@CustomerID as int,@RentalID as int)
+USE rental
+CREATE PROCEDURE BejPagese(@CustomerID as int,@FilmID as int,@StaffID as int)
 AS
 BEGIN
-
+DECLARE @PaymentID as bigint,
+@Amount as float
+SELECT @PaymentID=MAX(payment_id) from payment
+SET @PaymentID=@PaymentID+1
+SELECT @Amount=film.rental_rate from film where film.film_id=@FilmID
+INSERT INTO payment(payment_id,customer_id,staff_id,rental_id,amount,payment_date,last_update)
+VALUES (@PaymentID,@CustomerID,@StaffID,@FilmID,@Amount,GETDATE(),GETDATE())
 END
-GO
+EXEC BejPagese @CustomerID=55,@FilmID=89,@StaffID=3;
 
 //**********************************************RESULTS
-
+(1 row affected)
 ************************************************//
 
 
