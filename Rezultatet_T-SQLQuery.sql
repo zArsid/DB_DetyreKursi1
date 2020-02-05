@@ -1,16 +1,7 @@
-/*
-Grupi V
-Arsid Meta
-Xhulio Lekaj
-Leart Gogaj
-Gledis Kapedani
-Zyber Zagradi
-*/
-
 /*Query 1: Krijoni njeStored Procedure (SP) me emrin AfishoMuzikante qe afishojnë muzikantet
 (emër, mbiemër) qe kane lindur ne Birmingham dheqe kane luajtur nje instrument te dhene.
 Instrumenti dhe qyteti i lindjeste jepen si parametër inputi.*/
-
+Use musicians
 CREATE PROCEDURE AfishoMUzikante(@city as varchar(max),@instrument as varchar(max))
 AS
 BEGIN
@@ -24,8 +15,8 @@ WHERE place_town = @city
 AND instrument=@instrument
 END
 GO
-
 EXEC AfishoMUzikante @city=Birmingham,@instrument=guitar;
+
 //**********************************************RESULTS
 Emer Mbiemer
 Davis Heavan        
@@ -36,26 +27,30 @@ Davis Heavan
 /*Query 2: Krijoni nje funksion skalar me emrin NrInstrument qe llogarit numrin e instrumenteve
 qe mund te luaje nje muzikant. Ne rastin kur nuk luan asnjë instrument atëherë te afishohet
 mesazhi ‘Asnje instrument nuk luan ky muzikant. Emri i muzikantit te jete parametër inputi.*/
-
 CREATE FUNCTION NrInstrument(@MName as varchar(max))
-RETURNS INT
+RETURNS varchar(max)
 AS
 BEGIN
-DECLARE @ICount INT,@Output varchar(max)
+DECLARE @ICount INT,
+@Output varchar(max)
 select @ICount =COUNT(performer.instrument)
 from
 musician inner join performer 
 on musician.m_no=performer.perf_is	
 where musician.m_name like @MName
-RETURN @ICount
+if(@ICount=0)
+Set @Output='Asnje instrument nuk luan ky muzikant!'
+else
+Set @Output=@ICount
+RETURN @Output
 END
 print dbo.NrInstrument('John Smith')
 print dbo.NrInstrument('Theo Mengel')
-//**********************************************RESULTS
-0
-3     
-************************************************//
 
+//**********************************************RESULTS
+Asnje instrument nuk luan ky muzikant!
+3
+************************************************//
 
 
 
@@ -70,7 +65,8 @@ INSERT INTO LOGS values ('A band just performed on a concert')
 END
 INSERT INTO concert values (10,'Metropolitan',4,GETDATE(),21)
 select * from LOGS
-/**********************************************RESULTS
+
+//**********************************************RESULTS
 (1 row affected)
 
 (1 row affected)
@@ -78,7 +74,7 @@ select * from LOGS
 OutputFromTrigger
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 A band just performed on a concert   
-************************************************/
+************************************************//
 
 
 
@@ -93,7 +89,12 @@ BEGIN
 
 END
 GO
-select*from payment
+
+//**********************************************RESULTS
+
+************************************************//
+
+
 
 /*Query 2: Krijoni nje funksion skalar me emrin NrFilmaVonuar qe llogarit numrin e filmave qe i
 ka tejkaluar afati i dorëzimit.*/
@@ -108,6 +109,7 @@ from rental where rental.return_date is NULL
 RETURN @FCount
 END
 print dbo.NrFilmaVonuar()
+
 //**********************************************RESULTS
 182    
 ************************************************//
