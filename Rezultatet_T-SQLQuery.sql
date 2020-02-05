@@ -1,3 +1,12 @@
+/*
+Grupi V
+Arsid Meta
+Xhulio Lekaj
+Leart Gogaj
+Gledis Kapedani
+Zyber Zagradi
+*/
+
 /*Query 1: Krijoni njeStored Procedure (SP) me emrin AfishoMuzikante qe afishojnë muzikantet
 (emër, mbiemër) qe kane lindur ne Birmingham dheqe kane luajtur nje instrument te dhene.
 Instrumenti dhe qyteti i lindjeste jepen si parametër inputi.*/
